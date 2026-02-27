@@ -11,7 +11,7 @@ class StoreSparePartRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StoreSparePartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'spare_part_code_id' => 'required|exists:spare_part_codes,id',
+            'store_id' => 'required|exists:stores,id',
+            'serial_number' => 'nullable',
+            'quantity' => 'required|numeric|min:1',
+            'value' => 'required|numeric|min:1',
+            'purchase_date' => 'required|date|before_or_equal:today',
+            'supplier' => 'nullable|string',
+            'supplier_contact' => 'nullable|string',
         ];
     }
 }

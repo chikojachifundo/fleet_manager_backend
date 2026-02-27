@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\SparePart;
 use App\Http\Requests\StoreSparePartRequest;
 use App\Http\Requests\UpdateSparePartRequest;
+use App\Models\SparePartCode;
+use App\Models\Store;
+use App\Models\User;
 
 class SparePartController extends Controller
 {
@@ -13,7 +16,7 @@ class SparePartController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(SparePart::with('code', 'store')->get());
     }
 
     /**
@@ -21,7 +24,10 @@ class SparePartController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'stores' => Store::where('status', '=', 'open')->get(),
+            'codes' => SparePartCode::all(),
+        ]);
     }
 
     /**
@@ -29,7 +35,9 @@ class SparePartController extends Controller
      */
     public function store(StoreSparePartRequest $request)
     {
-        //
+        $data = arrday_merge($request->validated(), ['captured_by' => User::first()->id]);
+        $sparePart = SparePart::create($data);
+        return response()->json($sparePart, 201);
     }
 
     /**
@@ -37,7 +45,9 @@ class SparePartController extends Controller
      */
     public function show(SparePart $sparePart)
     {
-        //
+        return response()->json([
+            'sparePart' => $sparePart->load('code', 'store')
+        ]);
     }
 
     /**

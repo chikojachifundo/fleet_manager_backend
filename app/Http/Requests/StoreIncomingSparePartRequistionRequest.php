@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSparePartCodeRequest extends FormRequest
+class StoreIncomingSparePartRequistionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,11 +22,7 @@ class StoreSparePartCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|unique:spare_part_codes,code',
-            'name' => 'required|string|min:3|unique:spare_part_codes,name',
-            'model' => 'nullable|string|min:3',
-            'manufacturer' => 'nullable|string|min:3',
-            'description' => 'nullable|string|min:3',
+            //
         ];
     }
 }

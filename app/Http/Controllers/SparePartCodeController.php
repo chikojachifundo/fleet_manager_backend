@@ -7,6 +7,7 @@ use App\Models\SparePartCode;
 use App\Http\Requests\StoreSparePartCodeRequest;
 use App\Http\Requests\UpdateSparePartCodeRequest;
 use App\Models\Store;
+use App\Models\User;
 
 class SparePartCodeController extends Controller
 {
@@ -15,7 +16,7 @@ class SparePartCodeController extends Controller
      */
     public function index()
     {
-        return response()->json(SparePart::with('code', 'store')->get());
+        return response()->json(SparePartCode::all());
     }
 
     /**
@@ -23,10 +24,7 @@ class SparePartCodeController extends Controller
      */
     public function create()
     {
-        return response()->json([
-            'stores' => Store::where('status', '=', 'open')->get(),
-            'spares' => SparePartCode::all(),
-        ]);
+
     }
 
     /**
@@ -34,7 +32,8 @@ class SparePartCodeController extends Controller
      */
     public function store(StoreSparePartCodeRequest $request)
     {
-        //
+        $sparePartCode = SparePartCode::create($request->validated());
+        return response()->json($sparePartCode, 201);
     }
 
     /**

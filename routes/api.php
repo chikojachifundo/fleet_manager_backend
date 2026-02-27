@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SparePartCodeController;
+use App\Http\Controllers\SparePartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,4 +14,5 @@ Route::prefix('admins')->group(function () {
 });
 
 
-Route::resource('spares', SparePartCodeController::class);
+Route::resource('sparePartCodes', SparePartCodeController::class);
+Route::resource('spareParts', SparePartController::class);
