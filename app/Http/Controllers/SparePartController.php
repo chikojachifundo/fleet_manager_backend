@@ -35,7 +35,7 @@ class SparePartController extends Controller
      */
     public function store(StoreSparePartRequest $request)
     {
-        $data = arrday_merge($request->validated(), ['captured_by' => User::first()->id]);
+        $data = array_merge($request->validated(), ['captured_by' => User::first()->id]);
         $sparePart = SparePart::create($data);
         return response()->json($sparePart, 201);
     }
@@ -46,7 +46,7 @@ class SparePartController extends Controller
     public function show(SparePart $sparePart)
     {
         return response()->json([
-            'sparePart' => $sparePart->load('code', 'store')
+            'sparePart' => $sparePart->load('code', 'store','incomingRequisitions'),
         ]);
     }
 

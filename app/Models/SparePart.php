@@ -12,7 +12,7 @@ class SparePart extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $appends = ['formatted_value','formatted_purchase_date','formatted_expiry_date'];
+    protected $appends = ['formatted_value', 'formatted_purchase_date', 'formatted_expiry_date'];
 
     public function code()
     {
@@ -24,9 +24,14 @@ class SparePart extends Model
         return $this->belongsTo(Store::class);
     }
 
+    public function incomingRequisitions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(IncomingSparePartRequisition::class);
+    }
+
     public function getFormattedValueAttribute(): string
     {
-        return "MK ".number_format($this->attributes['value'], 2);
+        return "MK " . number_format($this->attributes['value'], 2);
     }
 
     public function getFormattedPurchaseDateAttribute(): ?string

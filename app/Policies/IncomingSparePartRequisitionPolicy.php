@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\IncomingSparePartRequistion;
+use App\Models\IncomingSparePartRequisition;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class IncomingSparePartRequistionPolicy
+class IncomingSparePartRequisitionPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class IncomingSparePartRequistionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, IncomingSparePartRequistion $incomingSparePartRequistion): bool
+    public function view(User $user, IncomingSparePartRequisition $incomingSparePartRequisition): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class IncomingSparePartRequistionPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, IncomingSparePartRequistion $incomingSparePartRequistion): bool
+    public function update(User $user, IncomingSparePartRequisition $incomingSparePartRequisition): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class IncomingSparePartRequistionPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, IncomingSparePartRequistion $incomingSparePartRequistion): bool
+    public function delete(User $user, IncomingSparePartRequisition $incomingSparePartRequisition): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class IncomingSparePartRequistionPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, IncomingSparePartRequistion $incomingSparePartRequistion): bool
+    public function restore(User $user, IncomingSparePartRequisition $incomingSparePartRequisition): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class IncomingSparePartRequistionPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, IncomingSparePartRequistion $incomingSparePartRequistion): bool
+    public function forceDelete(User $user, IncomingSparePartRequisition $incomingSparePartRequisition): bool
     {
         return false;
     }

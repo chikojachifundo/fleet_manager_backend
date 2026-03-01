@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncomingSparePartRequisitionController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use Illuminate\Http\Request;
@@ -16,3 +17,4 @@ Route::prefix('admins')->group(function () {
 
 Route::resource('sparePartCodes', SparePartCodeController::class);
 Route::resource('spareParts', SparePartController::class);
+Route::resource('incomingSparePartsRequisition', IncomingSparePartRequisitionController::class);
