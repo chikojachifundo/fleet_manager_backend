@@ -14,7 +14,9 @@ class IncomingSparePartRequisitionController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'requisitions' => IncomingSparePartRequisition::with('sparePart.code')->get(),
+        ]);
     }
 
     /**
