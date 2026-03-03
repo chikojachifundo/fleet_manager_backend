@@ -12,7 +12,12 @@ class IncomingSparePartRequisition extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $appends = ['formatted_date','formatted_value'];
+    protected $appends = ['formatted_date', 'formatted_value'];
+
+    public function sparePart()
+    {
+        return $this->belongsTo(SparePart::class);
+    }
 
     public function getFormattedDateAttribute(): string
     {
@@ -21,6 +26,6 @@ class IncomingSparePartRequisition extends Model
 
     public function getFormattedValueAttribute()
     {
-        return "MK ". number_format($this->attributes['value'], 2);
+        return "MK " . number_format($this->attributes['value'], 2);
     }
 }
