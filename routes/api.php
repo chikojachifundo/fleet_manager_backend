@@ -5,6 +5,7 @@ use App\Http\Controllers\IncomingSparePartRequisitionController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,5 @@ Route::post('spares/requisitions/approve', ApproveIncomingSparePartRequisition::
 Route::resource('sparePartCodes', SparePartCodeController::class);
 Route::resource('spareParts', SparePartController::class);
 Route::resource('incomingSparePartsRequisition', IncomingSparePartRequisitionController::class);
+
+Route::resource('vehicles', VehicleController::class);
