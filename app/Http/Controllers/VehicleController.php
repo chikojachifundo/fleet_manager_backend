@@ -45,7 +45,8 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         return response()->json([
-            'vehicle' => $vehicle
+            'vehicle' => $vehicle,
+            'documents'=>$vehicle->getMedia('bluebooks')
         ]);
     }
 
