@@ -22,9 +22,7 @@ class VehicleImport implements ToModel, WithHeadingRow, WithValidation
             'engine_number' => $row['engine_number'],
             'chassis_number' => $row['chassis_number'],
             'category' => $row['category'],
-            'year_of_manufacture' => is_numeric($row['year_of_manufacture'])
-                ? Date::excelToDateTimeObject($row['year_of_manufacture'])->format('Y-m-d')
-                : $row['year_of_manufacture'],
+
             'model' => $row['model'],
             'fuel' => $row['fuel'],
             'mileage' => $row['mileage'],

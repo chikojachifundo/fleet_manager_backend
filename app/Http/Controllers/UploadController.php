@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +23,34 @@ class UploadController extends Controller
         }
 
         $media = $vehicle
+            ->addMediaFromRequest('file')
+            ->usingName($request->category)
+            ->withCustomProperties([
+                'category' => $request->category
+            ])
+            ->toMediaCollection('vehicle_documents');
+
+        return response()->json([
+            'message' => 'Documentation uploaded successfully',
+            'media' => $media
+        ]);
+    }
+
+
+    public function driverDocumentation(Request $request, Driver $driver)
+    {
+        $validator = Validator::make($request->all(), [
+            'category' => 'required|string',
+            'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $media = $driver
             ->addMediaFromRequest('file')
             ->usingName($request->category)
             ->withCustomProperties([

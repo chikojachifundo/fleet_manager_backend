@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DriverImport;
 use App\Imports\VehicleImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,21 @@ class BatchUploadController extends Controller
 
         DB::transaction(function () use ($request) {
             Excel::import(new VehicleImport, $request->file('file'));
+        });
+
+        return response()->json([
+            'message' => 'Vehicles imported successfully'
+        ]);
+    }
+
+    public function driversBatchUpload(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,csv'
+        ]);
+
+        DB::transaction(function () use ($request) {
+            Excel::import(new DriverImport, $request->file('file'));
         });
 
         return response()->json([
