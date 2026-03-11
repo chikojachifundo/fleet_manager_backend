@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
+use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
@@ -41,4 +42,7 @@ Route::post('drivers/batch/upload', [BatchUploadController::class, 'driversBatch
 
 Route::resource('drivers', DriverController::class);
 
-Route::delete('documents/{document}/delete', DeleteMediaController::class)->name('documents.delete');
+
+Route::resource('consignments', ConsignmentController::class);
+
+Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');

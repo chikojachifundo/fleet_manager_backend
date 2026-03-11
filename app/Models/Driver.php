@@ -12,4 +12,10 @@ class Driver extends Model implements HasMedia
     /** @use HasFactory<\Database\Factories\DriverFactory> */
     use HasFactory, InteractsWithMedia;
     protected  $guarded = [];
+    protected $appends = ['full_name'];
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->firstname." ".$this->surname;
+    }
 }
