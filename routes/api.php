@@ -7,6 +7,7 @@ use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\IncomingSparePartRequisitionController;
+use App\Http\Controllers\LubricantController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
@@ -44,5 +45,7 @@ Route::resource('drivers', DriverController::class);
 
 
 Route::resource('consignments', ConsignmentController::class);
+
+Route::resource('lubricants', LubricantController::class);
 
 Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
