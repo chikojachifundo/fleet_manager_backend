@@ -8,6 +8,8 @@ use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\IncomingSparePartRequisitionController;
 use App\Http\Controllers\LubricantController;
+use App\Http\Controllers\LubricantTransactionActionController;
+use App\Http\Controllers\LubricantTransactionController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
@@ -47,5 +49,8 @@ Route::resource('drivers', DriverController::class);
 Route::resource('consignments', ConsignmentController::class);
 
 Route::resource('lubricants', LubricantController::class);
+Route::resource('lubricants/transactions', LubricantTransactionController::class);
+
+Route::patch('lubricants/transactions/{lubricantTransaction}/process', [LubricantTransactionActionController::class, 'approve'])->name('lubricants.transactions.approve');
 
 Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');

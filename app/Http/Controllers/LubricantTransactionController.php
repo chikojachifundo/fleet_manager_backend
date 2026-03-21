@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lubricant;
 use App\Models\LubricantTransaction;
 use App\Http\Requests\StoreLubricantTransactionRequest;
 use App\Http\Requests\UpdateLubricantTransactionRequest;
+use App\Models\User;
+use http\Env\Response;
 
 class LubricantTransactionController extends Controller
 {
@@ -29,7 +32,22 @@ class LubricantTransactionController extends Controller
      */
     public function store(StoreLubricantTransactionRequest $request)
     {
-        //
+        $data = $request->validated();
+        $lubricant = Lubricant::find($data['lubricant_id']);
+        if ($data['type'] == 'issue') {
+            if ($data['quantity'] > $lubricant->current_stock) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => [
+                        'quantity' => ['Quantity exceeds available stock']
+                    ]
+                ], 422);
+            }
+        }
+        LubricantTransaction::create(array_merge($request->validated(), ['initiator' => User::first()->id]));
+        return response()->json([
+            'message' => 'Lubricant transaction created successfully',
+        ]);
     }
 
     /**

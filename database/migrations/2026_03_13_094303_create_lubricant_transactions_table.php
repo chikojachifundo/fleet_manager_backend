@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->date('date');
             $table->double('quantity')->default(0);
             $table->double('cost')->default(0);
-            $table->enum('type', ['issue', 'purchase', 'adjustment'])->default('out');
+            $table->enum('type', ['issue', 'purchase', 'adjustment']);
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
             $table->foreignId('initiator')->constrained('users');
             $table->foreignId('approver')->nullable()->constrained('users');
             $table->timestamps();

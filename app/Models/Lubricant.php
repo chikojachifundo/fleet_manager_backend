@@ -11,4 +11,9 @@ class Lubricant extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function transactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LubricantTransaction::class);
+    }
 }

@@ -14,7 +14,7 @@ class LubricantController extends Controller
     public function index()
     {
         return response()->json([
-            'lubricants' => Lubricant::all()
+            'lubricants' => Lubricant::with('transactions')->get()
         ]);
     }
 
@@ -43,7 +43,7 @@ class LubricantController extends Controller
     public function show(Lubricant $lubricant)
     {
         return response()->json([
-            'lubricant' => $lubricant
+            'lubricant' => $lubricant->load(['transactions.vehicle'])
         ]);
     }
 

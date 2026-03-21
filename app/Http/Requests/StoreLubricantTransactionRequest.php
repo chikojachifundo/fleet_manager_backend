@@ -11,7 +11,7 @@ class StoreLubricantTransactionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreLubricantTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'lubricant_id' => 'required|exists:lubricants,id',
+            'vehicle_id' => 'nullable|exists:vehicles,id',
+            'date' => 'required|date|before_or_equal:today',
+            'quantity' => 'required|numeric|min:1',
+            'cost' => 'numeric|numeric|min:1',
+            'type' => 'required|string|in:issue,purchase',
         ];
     }
 }
