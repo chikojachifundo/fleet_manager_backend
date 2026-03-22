@@ -28,7 +28,7 @@ class StoreVehicleRequest extends FormRequest
             'model' => 'required|string|min:3',
             'category' => 'required|string|min:3',
             'year_of_manufacture' => 'required|date|before:tomorrow',
-            'fuel' => 'required|string|min:3',
+            'fuel_id' => 'nullable|exists:fuels,id',
             'mileage' => 'nullable|numeric|min:1',
             'description' => 'nullable|string|min:3',
         ];

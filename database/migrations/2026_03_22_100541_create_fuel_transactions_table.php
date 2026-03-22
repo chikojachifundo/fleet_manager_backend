@@ -10,16 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('lubricant_transactions', function (Blueprint $table) {
+        Schema::create('fuel_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lubricant_id')->constrained('lubricants');
-            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles');
+            $table->foreignId('fuel_id')->constrained('fuels');
+            $table->foreignId('vehicle_id')->constrained('vehicles');
             $table->foreignId('consignment_id')->nullable()->constrained('consignments');
             $table->date('date');
-            $table->double('quantity')->default(0);
-            $table->double('cost')->default(0);
-            $table->enum('type', ['issue', 'purchase', 'adjustment']);
-            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
+            $table->double('cost_per_litre');
+            $table->double('quantity');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->foreignId('initiator')->constrained('users');
             $table->foreignId('approver')->nullable()->constrained('users');
             $table->timestamps();
@@ -31,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('lubricant_transactions');
+        Schema::dropIfExists('fuel_transactions');
     }
 };

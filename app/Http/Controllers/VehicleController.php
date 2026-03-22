@@ -14,7 +14,7 @@ class VehicleController extends Controller
     public function index()
     {
         return response()->json([
-            'vehicles' => Vehicle::all()
+            'vehicles' => Vehicle::with('fuel')->get()
         ]);
     }
 
@@ -31,7 +31,6 @@ class VehicleController extends Controller
      */
     public function store(StoreVehicleRequest $request)
     {
-
         Vehicle::create($request->validated());
         return response()->json([
             'data' => $request->validated()
@@ -45,7 +44,7 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         return response()->json([
-            'vehicle' => $vehicle,
+            'vehicle' => $vehicle->load('fuel'),
             'documents'=>$vehicle->getMedia('bluebooks')
         ]);
     }

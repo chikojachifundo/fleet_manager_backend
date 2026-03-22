@@ -6,6 +6,8 @@ use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\FuelController;
+use App\Http\Controllers\FuelTransactionController;
 use App\Http\Controllers\IncomingSparePartRequisitionController;
 use App\Http\Controllers\LubricantController;
 use App\Http\Controllers\LubricantTransactionActionController;
@@ -26,6 +28,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('admins')->group(function () {
 });
 
+
 Route::get('stores/dashboard', StoresDashboardController::class);
 Route::post('spares/requisitions/approve', ApproveIncomingSparePartRequisition::class)->name('spares.requisitions.approve');
 
@@ -44,6 +47,9 @@ Route::get('drivers/template', [DownloadTemplateController::class, 'downloadDriv
 Route::post('drivers/batch/upload', [BatchUploadController::class, 'driversBatchUpload'])->name('drivers.batch.upload');
 
 Route::resource('drivers', DriverController::class);
+
+Route::resource('fuels', FuelController::class);
+Route::resource('fuel/transactions', FuelTransactionController::class);
 
 
 Route::resource('consignments', ConsignmentController::class);

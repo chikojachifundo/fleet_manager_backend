@@ -17,8 +17,14 @@ class Vehicle extends Model implements HasMedia
     protected $guarded = [];
     protected $appends = ['formatted_year_of_manufacture'];
 
+    public function fuel()
+    {
+        return $this->belongsTo(Fuel::class);
+    }
+
     public function getFormattedYearOfManufactureAttribute(): string
     {
         return Carbon::parse($this->year_of_manufacture)->format('Y');
     }
+
 }

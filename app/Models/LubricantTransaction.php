@@ -13,7 +13,7 @@ class LubricantTransaction extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['formatted_date'];
+    protected $appends = ['formatted_date','formatted_cost'];
 
     public function lubricant()
     {
@@ -28,5 +28,10 @@ class LubricantTransaction extends Model
     public function getFormattedDateAttribute(): string
     {
         return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
+
+    public function getFormattedCostAttribute(): string
+    {
+        return number_format($this->attributes['cost'], 2);
     }
 }

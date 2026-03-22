@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('model')->nullable();
             $table->enum('category', ['horse', 'trailer', 'saloon', 'tipper', 'other'])->default('other');
             $table->date('year_of_manufacture')->nullable();
-            $table->enum('fuel', ['diesel', 'petrol', 'electric'])->default('diesel');
+            $table->foreignId('fuel_id')->nullable()->constrained('fuels');
             $table->double('mileage')->default(0);
             $table->enum('status', ['active', 'inactive', 'written-off'])->default('active');
             $table->string('description')->nullable();
