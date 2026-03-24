@@ -16,7 +16,9 @@ class SparePartController extends Controller
      */
     public function index()
     {
-        return response()->json(SparePart::with('code', 'store')->get());
+        return response()->json([
+            'spareParts' => SparePart::with('code', 'store')->get()
+        ]);
     }
 
     /**
@@ -46,7 +48,7 @@ class SparePartController extends Controller
     public function show(SparePart $sparePart)
     {
         return response()->json([
-            'sparePart' => $sparePart->load('code', 'store','incomingRequisitions'),
+            'sparePart' => $sparePart->load('code', 'store', 'incomingRequisitions'),
         ]);
     }
 

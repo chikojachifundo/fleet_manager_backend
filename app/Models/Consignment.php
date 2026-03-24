@@ -12,7 +12,7 @@ class Consignment extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $appends = ['formatted_date','formatted_drivers_allowance'];
+    protected $appends = ['formatted_date', 'formatted_drivers_allowance'];
 
     public function driver(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
@@ -47,6 +47,11 @@ class Consignment extends Model
     public function lubricantsTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(LubricantTransaction::class, 'consignment_id', 'id');
+    }
+
+    public function fuelTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(FuelTransaction::class, 'consignment_id', 'id');
     }
 
     public function getFormattedDateAttribute()

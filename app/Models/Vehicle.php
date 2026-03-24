@@ -22,6 +22,11 @@ class Vehicle extends Model implements HasMedia
         return $this->belongsTo(Fuel::class);
     }
 
+    public function fuelTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(FuelTransaction::class);
+    }
+
     public function getFormattedYearOfManufactureAttribute(): string
     {
         return Carbon::parse($this->year_of_manufacture)->format('Y');

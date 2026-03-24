@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Fuel;
 use App\Models\Vehicle;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -16,6 +17,7 @@ class VehicleImport implements ToModel, WithHeadingRow, WithValidation
 
     public function model(array $row)
     {
+        $fuel = Fuel::where('name', '=', ucfirst(strtolower($row['fuel'])))->first();
         // TODO: Implement model() method.
         return new Vehicle([
             'registration_number' => $row['registration_number'],
@@ -24,7 +26,7 @@ class VehicleImport implements ToModel, WithHeadingRow, WithValidation
             'category' => $row['category'],
 
             'model' => $row['model'],
-            'fuel' => $row['fuel'],
+            'fuel_id' => $fuel->id,
             'mileage' => $row['mileage'],
             'description' => $row['description'],
         ]);

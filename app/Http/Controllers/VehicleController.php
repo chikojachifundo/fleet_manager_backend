@@ -44,7 +44,7 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         return response()->json([
-            'vehicle' => $vehicle->load('fuel'),
+            'vehicle' => $vehicle->load('fuel','fuelTransactions.fuel'),
             'documents'=>$vehicle->getMedia('bluebooks')
         ]);
     }

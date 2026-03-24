@@ -6,9 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FuelTransaction extends Model
+class VehicleService extends Model
 {
-    /** @use HasFactory<\Database\Factories\FuelTransactionFactory> */
+    /** @use HasFactory<\Database\Factories\VehicleServiceFactory> */
     use HasFactory;
 
     protected $guarded = [];
@@ -19,13 +19,18 @@ class FuelTransaction extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function fuel()
+    public function consignment()
     {
-        return $this->belongsTo(Fuel::class);
+        return $this->belongsTo(Consignment::class);
+    }
+
+    public function sparePartTransactions()
+    {
+        return $this->hasMany(SparePartTransaction::class);
     }
 
     public function getFormattedDateAttribute()
     {
-        return Carbon::parse($this->attributes['date'])->format('d M Y');
+        return Carbon::parse($this->attributes['date'])->format('d F Y');
     }
 }
