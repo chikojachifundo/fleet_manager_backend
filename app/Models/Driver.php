@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -12,10 +13,18 @@ class Driver extends Model implements HasMedia
     /** @use HasFactory<\Database\Factories\DriverFactory> */
     use HasFactory, InteractsWithMedia;
     protected  $guarded = [];
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name','age'];
+    protected $casts = [
+        'birthdate' => 'date',
+    ];
 
     public function getFullNameAttribute(): string
     {
         return $this->firstname." ".$this->surname;
+    }
+
+    public function getAgeAttribute()
+    {
+        return $this->birthdate?->age;
     }
 }

@@ -54,6 +54,11 @@ class Consignment extends Model
         return $this->hasMany(FuelTransaction::class, 'consignment_id', 'id');
     }
 
+    public function vehicleServices()
+    {
+        return $this->hasMany(VehicleService::class, 'consignment_id', 'id');
+    }
+
     public function getFormattedDateAttribute()
     {
         return Carbon::parse($this->attributes['date'])->translatedFormat('d F Y');

@@ -28,6 +28,7 @@ class StoreVehicleServiceRequest extends FormRequest
             'contractor' => ['nullable', 'string'],
             'contractor_contact' => ['nullable', 'string'],
             'consignment_id' => ['nullable', 'exists:consignments,id'],
+            'cost' => ['nullable', 'numeric'],
             //  ARRAY VALIDATION
             'spare_parts' => ['nullable', 'array'],
             'spare_parts.*.spare_part_id' => ['required', 'exists:spare_parts,id'],

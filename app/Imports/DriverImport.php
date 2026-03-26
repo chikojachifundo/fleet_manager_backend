@@ -41,7 +41,8 @@ class DriverImport implements ToCollection, WithHeadingRow, WithValidation
                     'name' => $row['firstname'].' '.$row['surname'],
                     'email' => $row['email'],
                     'password' => Hash::make('password123'), // default password
-                    'status' => 'active'
+                    'status' => 'active',
+                    'group'=>'drivers'
                 ]);
 
 

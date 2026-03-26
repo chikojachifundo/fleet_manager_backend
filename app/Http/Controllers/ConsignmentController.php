@@ -53,7 +53,17 @@ class ConsignmentController extends Controller
     public function show(Consignment $consignment)
     {
         return response()->json([
-            'consignment' => $consignment->load('driver','consignmentRoute','horse','firstTrailer','secondTrailer','lubricantsTransactions.lubricant','fuelTransactions.fuel'),
+            'consignment' => $consignment->load([
+                'driver',
+                'consignmentRoute',
+                'horse',
+                'firstTrailer',
+                'secondTrailer',
+                'lubricantsTransactions.lubricant',
+                'fuelTransactions.fuel',
+                'vehicleServices.sparePartTransactions',
+                'vehicleServices.vehicle',
+            ]),
         ]);
     }
 

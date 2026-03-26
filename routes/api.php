@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
+use App\Http\Controllers\ChangeUserPasswordController;
 use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
@@ -17,10 +19,15 @@ use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehicleServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -68,3 +75,7 @@ Route::resource('vehicles-servicing', VehicleServiceController::class)->paramete
 
 
 Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
+
+
+Route::resource('users', UserController::class);
+Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
