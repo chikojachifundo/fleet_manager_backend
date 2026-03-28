@@ -5,6 +5,7 @@ use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
 use App\Http\Controllers\ChangeUserPasswordController;
 use App\Http\Controllers\ConsignmentController;
+use App\Http\Controllers\ConsignmentRouteController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
@@ -61,6 +62,7 @@ Route::resource('fuels', FuelController::class);
 Route::resource('fuel/transactions', FuelTransactionController::class);
 Route::patch('fuel/transactions/{fuelTransaction}/process', [FuelTransactionActionController::class, 'process']);
 
+Route::resource('consignment/routes', ConsignmentRouteController::class);
 
 Route::resource('consignments', ConsignmentController::class);
 

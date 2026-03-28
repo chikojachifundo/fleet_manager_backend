@@ -9,4 +9,6 @@ class ConsignmentRoute extends Model
 {
     /** @use HasFactory<\Database\Factories\ConsignmentRouteFactory> */
     use HasFactory;
+
+    protected $guarded = [];
 }

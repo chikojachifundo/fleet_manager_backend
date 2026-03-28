@@ -11,7 +11,7 @@ class StoreConsignmentRouteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreConsignmentRouteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'code' => 'string|required|unique:consignment_routes,code',
+            'name' => 'string|required|unique:consignment_routes,name',
+            'mileage' => 'required|numeric|between:1,999999.99',
+            'description' => 'string|nullable',
         ];
     }
 }

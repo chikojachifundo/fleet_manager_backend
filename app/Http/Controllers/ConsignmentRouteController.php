@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ConsignmentRoute;
 use App\Http\Requests\StoreConsignmentRouteRequest;
 use App\Http\Requests\UpdateConsignmentRouteRequest;
+use function MongoDB\Driver\Monitoring\removeSubscriber;
 
 class ConsignmentRouteController extends Controller
 {
@@ -13,7 +14,9 @@ class ConsignmentRouteController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'consignmentRoutes' => ConsignmentRoute::all()
+        ]);
     }
 
     /**
@@ -29,7 +32,10 @@ class ConsignmentRouteController extends Controller
      */
     public function store(StoreConsignmentRouteRequest $request)
     {
-        //
+        ConsignmentRoute::create($request->validated());
+        return response()->json([
+            'message' => 'Consignment route created'
+        ]);
     }
 
     /**
