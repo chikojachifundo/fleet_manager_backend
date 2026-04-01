@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class VehicleTemplateExport implements WithHeadings
 {
 
-
     public function headings(): array
     {
         // TODO: Implement headings() method.

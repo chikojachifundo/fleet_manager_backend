@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSparePartCodeRequest;
 use App\Http\Requests\UpdateSparePartCodeRequest;
 use App\Models\Store;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class SparePartCodeController extends Controller
 {
@@ -41,7 +42,9 @@ class SparePartCodeController extends Controller
      */
     public function show(SparePartCode $sparePartCode)
     {
-        //
+        return response()->json([
+            'sparePartCode' => $sparePartCode,
+        ]);
     }
 
     /**
@@ -57,7 +60,11 @@ class SparePartCodeController extends Controller
      */
     public function update(UpdateSparePartCodeRequest $request, SparePartCode $sparePartCode)
     {
-        //
+
+        $sparePartCode->update($request->validated());
+        return response()->json([
+            'message'=>'Spare Part Code updated successfully',
+        ]);
     }
 
     /**

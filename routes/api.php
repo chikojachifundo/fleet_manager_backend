@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ApproveConsignmentController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
 use App\Http\Controllers\ChangeUserPasswordController;
@@ -16,9 +17,11 @@ use App\Http\Controllers\IncomingSparePartRequisitionController;
 use App\Http\Controllers\LubricantController;
 use App\Http\Controllers\LubricantTransactionActionController;
 use App\Http\Controllers\LubricantTransactionController;
+use App\Http\Controllers\RejectConsignmentController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
+use App\Http\Controllers\TyreController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -38,46 +41,55 @@ Route::get('/user', function (Request $request) {
 Route::prefix('admins')->group(function () {
 });
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-Route::get('stores/dashboard', StoresDashboardController::class);
-Route::post('spares/requisitions/approve', ApproveIncomingSparePartRequisition::class)->name('spares.requisitions.approve');
+    Route::get('stores/dashboard', StoresDashboardController::class);
+    Route::post('spares/requisitions/approve', ApproveIncomingSparePartRequisition::class)->name('spares.requisitions.approve');
 
-Route::resource('sparePartCodes', SparePartCodeController::class);
-Route::resource('spareParts', SparePartController::class);
-Route::resource('incomingSparePartsRequisition', IncomingSparePartRequisitionController::class);
+    Route::resource('sparePartCodes', SparePartCodeController::class);
+    Route::resource('spareParts', SparePartController::class);
+    Route::resource('incomingSparePartsRequisition', IncomingSparePartRequisitionController::class);
 
-Route::post('vehicles/{vehicle}/documents/upload', [UploadController::class, 'vehicleDocumentation'])->name('vehicles.documentation.upload');
-Route::get('vehicles/template', [DownloadTemplateController::class, 'downloadVehicleTemplate'])->name('vehicles.template');
-Route::post('vehicles/batch/upload', [BatchUploadController::class, 'vehiclesBatchUpload'])->name('vehicles.batch.upload');
-Route::resource('vehicles', VehicleController::class);
-
-
-Route::post('drivers/{driver}/documents/upload', [UploadController::class, 'driverDocumentation'])->name('drivers.documentation.upload');
-Route::get('drivers/template', [DownloadTemplateController::class, 'downloadDriversTemplate'])->name('drivers.template');
-Route::post('drivers/batch/upload', [BatchUploadController::class, 'driversBatchUpload'])->name('drivers.batch.upload');
-
-Route::resource('drivers', DriverController::class);
-
-Route::resource('fuels', FuelController::class);
-Route::resource('fuel/transactions', FuelTransactionController::class);
-Route::patch('fuel/transactions/{fuelTransaction}/process', [FuelTransactionActionController::class, 'process']);
-
-Route::resource('consignment/routes', ConsignmentRouteController::class);
-
-Route::resource('consignments', ConsignmentController::class);
-
-Route::resource('lubricants', LubricantController::class);
-Route::resource('lubricants/transactions', LubricantTransactionController::class);
-Route::patch('lubricants/transactions/{lubricantTransaction}/process', [LubricantTransactionActionController::class, 'approve'])->name('lubricants.transactions.approve');
+    Route::resource('tyres', TyreController::class);
+    Route::get('tyr/template', [DownloadTemplateController::class, 'downloadTyresTemplate'])->name('tyres.template');
+    Route::post('tyr/batch/upload', [BatchUploadController::class, 'tyresBatchUpload'])->name('tyres.batch.upload');
 
 
-Route::resource('vehicles-servicing', VehicleServiceController::class)->parameters([
-    'vehicles-servicing' => 'vehicleService'
-]);
+    Route::post('vehicles/{vehicle}/documents/upload', [UploadController::class, 'vehicleDocumentation'])->name('vehicles.documentation.upload');
+    Route::get('vehicles/template', [DownloadTemplateController::class, 'downloadVehicleTemplate'])->name('vehicles.template');
+    Route::post('vehicles/batch/upload', [BatchUploadController::class, 'vehiclesBatchUpload'])->name('vehicles.batch.upload');
+    Route::resource('vehicles', VehicleController::class);
 
 
-Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
+    Route::post('drivers/{driver}/documents/upload', [UploadController::class, 'driverDocumentation'])->name('drivers.documentation.upload');
+    Route::get('drivers/template', [DownloadTemplateController::class, 'downloadDriversTemplate'])->name('drivers.template');
+    Route::post('drivers/batch/upload', [BatchUploadController::class, 'driversBatchUpload'])->name('drivers.batch.upload');
+
+    Route::resource('drivers', DriverController::class);
+
+    Route::resource('fuels', FuelController::class);
+    Route::resource('fuel/transactions', FuelTransactionController::class);
+    Route::patch('fuel/transactions/{fuelTransaction}/process', [FuelTransactionActionController::class, 'process']);
+
+    Route::resource('consignment/routes', ConsignmentRouteController::class);
+
+    Route::resource('consignments', ConsignmentController::class);
+    Route::post('consignments/{consignment}/approve', ApproveConsignmentController::class);
+    Route::post('consignments/{consignment}/reject', RejectConsignmentController::class);
+
+    Route::resource('lubricants', LubricantController::class);
+    Route::resource('lubricants/transactions', LubricantTransactionController::class);
+    Route::patch('lubricants/transactions/{lubricantTransaction}/process', [LubricantTransactionActionController::class, 'approve'])->name('lubricants.transactions.approve');
 
 
-Route::resource('users', UserController::class);
-Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
+    Route::resource('vehicles-servicing', VehicleServiceController::class)->parameters([
+        'vehicles-servicing' => 'vehicleService'
+    ]);
+
+
+    Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
+
+
+    Route::resource('users', UserController::class);
+    Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
+});
