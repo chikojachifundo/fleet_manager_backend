@@ -14,7 +14,7 @@ class TyreController extends Controller
     public function index()
     {
         return response()->json([
-            'tyres' => Tyre::all()
+            'tyres' => Tyre::with('movements')->get()
         ]);
     }
 
@@ -41,7 +41,7 @@ class TyreController extends Controller
     public function show(Tyre $tyre)
     {
         return response()->json([
-            'tyre' => $tyre
+            'tyre' => $tyre->load(['movements.vehicle','movements.tyrePosition'])
         ]);
     }
 

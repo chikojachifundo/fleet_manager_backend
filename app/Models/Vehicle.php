@@ -32,4 +32,9 @@ class Vehicle extends Model implements HasMedia
         return Carbon::parse($this->year_of_manufacture)->format('Y');
     }
 
+    public function tyreMovements(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TyreMovement::class);
+    }
+
 }

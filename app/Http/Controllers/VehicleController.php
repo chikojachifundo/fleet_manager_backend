@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tyre;
+use App\Models\TyrePosition;
 use App\Models\Vehicle;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
@@ -14,7 +16,7 @@ class VehicleController extends Controller
     public function index()
     {
         return response()->json([
-            'vehicles' => Vehicle::with('fuel')->get()
+            'vehicles' => Vehicle::with('fuel')->get(),
         ]);
     }
 
@@ -44,8 +46,11 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         return response()->json([
-            'vehicle' => $vehicle->load('fuel','fuelTransactions.fuel'),
-            'documents'=>$vehicle->getMedia('bluebooks')
+            'vehicle' => $vehicle->load('fuel', 'fuelTransactions.fuel'),
+            'documents' => $vehicle->getMedia('bluebooks'),
+            'tyrePositions' => TyrePosition::where('vehicle_type', $vehicle->category)->get(),
+            'availableTyres' => Tyre::where('status', 'in_stock')->get(),
+            'tyreMovements' => $vehicle->tyreMovements,
         ]);
     }
 

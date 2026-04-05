@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ApproveConsignmentController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
+use App\Http\Controllers\CancelTyreMovementController;
 use App\Http\Controllers\ChangeUserPasswordController;
 use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\ConsignmentRouteController;
@@ -22,6 +23,8 @@ use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
 use App\Http\Controllers\TyreController;
+use App\Http\Controllers\TyreMovementController;
+use App\Http\Controllers\TyreRepairController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -53,6 +56,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('tyres', TyreController::class);
     Route::get('tyr/template', [DownloadTemplateController::class, 'downloadTyresTemplate'])->name('tyres.template');
     Route::post('tyr/batch/upload', [BatchUploadController::class, 'tyresBatchUpload'])->name('tyres.batch.upload');
+
+    Route::resource('tyre/movements', TyreMovementController::class);
+    Route::post('tyre/movements/{tyreMovement}/cancel', CancelTyreMovementController::class);
+
+    Route::post('tyres/repairs/{tyre}/repair', [TyreRepairController::class, 'sendToRepair'])->name('tyres.repair.send');
+    Route::post('tyres/repairs/{tyre}/accept', [TyreRepairController::class, 'acceptFromRepair'])->name('tyres.repair.accept');
+    Route::post('tyres/repairs/{tyre}/scrap', [TyreRepairController::class, 'markScrap'])->name('tyres.repair.markScrap');
 
 
     Route::post('vehicles/{vehicle}/documents/upload', [UploadController::class, 'vehicleDocumentation'])->name('vehicles.documentation.upload');
