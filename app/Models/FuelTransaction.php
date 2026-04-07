@@ -12,7 +12,7 @@ class FuelTransaction extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $appends = ['formatted_date'];
+    protected $appends = ['formatted_date','total_cost'];
 
     public function vehicle()
     {
@@ -24,8 +24,13 @@ class FuelTransaction extends Model
         return $this->belongsTo(Fuel::class);
     }
 
-    public function getFormattedDateAttribute()
+    public function getFormattedDateAttribute(): string
     {
         return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
+
+    public function getTotalCostAttribute(): float|int
+    {
+        return $this->attributes['cost_per_litre'] * $this->attributes['quantity'];
     }
 }

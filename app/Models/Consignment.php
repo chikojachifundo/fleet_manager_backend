@@ -14,34 +14,34 @@ class Consignment extends Model
     protected $guarded = [];
     protected $appends = ['formatted_date', 'formatted_drivers_allowance'];
 
-    public function driver(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function driver(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Driver::class, 'id', 'driver_id');
+        return $this->belongsTo(Driver::class);
     }
 
-    public function horse()
+    public function horse(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Vehicle::class, 'id', 'horse_id');
+        return $this->belongsTo(Vehicle::class);
     }
 
-    public function vehicle()
+    public function vehicle(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Vehicle::class, 'id', 'vehicle_id');
+        return $this->belongsTo(Vehicle::class);
     }
 
-    public function firstTrailer()
+    public function firstTrailer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Vehicle::class, 'id', 'first_trailer_id');
+        return $this->belongsTo(Vehicle::class);
     }
 
-    public function secondTrailer()
+    public function secondTrailer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Vehicle::class, 'id', 'second_trailer_id');
+        return $this->belongsTo(Vehicle::class);
     }
 
-    public function consignmentRoute(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function consignmentRoute(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(ConsignmentRoute::class, 'id', 'consignment_route_id');
+        return $this->belongsTo(ConsignmentRoute::class);
     }
 
     public function lubricantsTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -68,4 +68,11 @@ class Consignment extends Model
     {
         return number_format($this->attributes['drivers_allowance'], 2, '.', ',');
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class, 'consignment_id', 'id');
+    }
+
+
 }

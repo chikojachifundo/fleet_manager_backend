@@ -11,7 +11,7 @@ class StoreExpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'description' => 'required|string|min:3',
+            'amount' => 'required|numeric|min:1',
+            'date' => 'required|date|before:tomorrow',
+            'category' => 'required|string',
+            'vehicle_id' => 'nullable|exists:vehicles,id',
+            'consignment_id' => 'nullable|exists:consignments,id',
         ];
     }
 }

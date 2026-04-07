@@ -13,7 +13,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'expenses' => Expense::with('initiatedBy', 'approvedBy')->get()
+        ]);
     }
 
     /**
@@ -29,7 +31,8 @@ class ExpenseController extends Controller
      */
     public function store(StoreExpenseRequest $request)
     {
-        //
+        Expense::create(array_merge($request->validated(), ['initiator' => auth()->id()]));
+        return response()->json(['message' => 'Expense created successfully.']);
     }
 
     /**

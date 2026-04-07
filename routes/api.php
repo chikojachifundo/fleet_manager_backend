@@ -11,6 +11,8 @@ use App\Http\Controllers\ConsignmentRouteController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ExpenseActionController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FuelController;
 use App\Http\Controllers\FuelTransactionActionController;
 use App\Http\Controllers\FuelTransactionController;
@@ -19,6 +21,8 @@ use App\Http\Controllers\LubricantController;
 use App\Http\Controllers\LubricantTransactionActionController;
 use App\Http\Controllers\LubricantTransactionController;
 use App\Http\Controllers\RejectConsignmentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Reports\ConsignmentsReportController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\StoresDashboardController;
@@ -92,6 +96,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('lubricants/transactions/{lubricantTransaction}/process', [LubricantTransactionActionController::class, 'approve'])->name('lubricants.transactions.approve');
 
 
+    Route::resource('expenses', ExpenseController::class);
+    Route::post('expenses/{expense}/approve', [ExpenseActionController::class, 'approve'])->name('expenses.actions.approve');
+    Route::post('expenses/{expense}/reject', [ExpenseActionController::class, 'reject'])->name('expenses.actions.reject');
+
     Route::resource('vehicles-servicing', VehicleServiceController::class)->parameters([
         'vehicles-servicing' => 'vehicleService'
     ]);
@@ -99,6 +107,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
 
+
+    Route::get('reports/consignments', [ConsignmentsReportController::class,'generate'])->name('reports.consignments');
+    Route::get('reports/consignments/export/excel', [ConsignmentsReportController::class,'exportExcel'])->name('reports.consignments.export.excel');
+    Route::get('reports/consignments/export/pdf', [ConsignmentsReportController::class,'exportPDF'])->name('reports.consignments.export.pdf');
 
     Route::resource('users', UserController::class);
     Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
