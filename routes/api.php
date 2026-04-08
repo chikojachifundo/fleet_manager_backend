@@ -5,9 +5,11 @@ use App\Http\Controllers\ApproveConsignmentController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
 use App\Http\Controllers\BatchUploadController;
 use App\Http\Controllers\CancelTyreMovementController;
+use App\Http\Controllers\CancelVehicleCertificateController;
 use App\Http\Controllers\ChangeUserPasswordController;
 use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\ConsignmentRouteController;
+use App\Http\Controllers\Dashboards\LubricantsDashboardController;
 use App\Http\Controllers\DeleteMediaController;
 use App\Http\Controllers\DownloadTemplateController;
 use App\Http\Controllers\DriverController;
@@ -31,6 +33,7 @@ use App\Http\Controllers\TyreMovementController;
 use App\Http\Controllers\TyreRepairController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleCertificateController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehicleServiceController;
 use Illuminate\Http\Request;
@@ -91,10 +94,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('consignments/{consignment}/approve', ApproveConsignmentController::class);
     Route::post('consignments/{consignment}/reject', RejectConsignmentController::class);
 
+    Route::get('/dashboard/lubricants', [LubricantsDashboardController::class, 'counters'])->name('dashboard.lubricants.counters');
+
     Route::resource('lubricants', LubricantController::class);
     Route::resource('lubricants/transactions', LubricantTransactionController::class);
     Route::patch('lubricants/transactions/{lubricantTransaction}/process', [LubricantTransactionActionController::class, 'approve'])->name('lubricants.transactions.approve');
 
+    Route::resource('vehicle/certificates', VehicleCertificateController::class);
+    Route::get('certificates/{vehicleCertificate}/cancel', CancelVehicleCertificateController::class);
 
     Route::resource('expenses', ExpenseController::class);
     Route::post('expenses/{expense}/approve', [ExpenseActionController::class, 'approve'])->name('expenses.actions.approve');
@@ -108,9 +115,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
 
 
-    Route::get('reports/consignments', [ConsignmentsReportController::class,'generate'])->name('reports.consignments');
-    Route::get('reports/consignments/export/excel', [ConsignmentsReportController::class,'exportExcel'])->name('reports.consignments.export.excel');
-    Route::get('reports/consignments/export/pdf', [ConsignmentsReportController::class,'exportPDF'])->name('reports.consignments.export.pdf');
+    Route::get('reports/consignments', [ConsignmentsReportController::class, 'generate'])->name('reports.consignments');
+    Route::get('reports/consignments/export/excel', [ConsignmentsReportController::class, 'exportExcel'])->name('reports.consignments.export.excel');
+    Route::get('reports/consignments/export/pdf', [ConsignmentsReportController::class, 'exportPDF'])->name('reports.consignments.export.pdf');
 
     Route::resource('users', UserController::class);
     Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');

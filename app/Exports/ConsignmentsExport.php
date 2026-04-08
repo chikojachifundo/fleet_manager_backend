@@ -32,10 +32,11 @@ class ConsignmentsExport implements FromArray, WithHeadings, WithStyles, WithEve
             $this->totals['driver'],          // driver_allowance total
             $this->totals['fuel'],            // fuel_total
             $this->totals['servicing'],       // servicing_total
-            $this->totals['road'],            // road_charges_total
-            '',                               // tollgate_charges_total (optional)
-            '',                               // other_expenses_total (optional)
-            $this->totals['grand_total'],     // total_cost
+            $this->totals['road_charges'],    // road_charges_total
+            $this->totals['tollgate'],        // tollgate_charges_total (optional)
+            $this->totals['lubricants'],      // lubricants (optional)
+            $this->totals['other_expenses'],  // other_expenses_total (optional)
+            $this->totals['grand_total'],    // total_cost
         ];
 
         return $data;
@@ -60,6 +61,7 @@ class ConsignmentsExport implements FromArray, WithHeadings, WithStyles, WithEve
             'servicing_total',
             'road_charges_total',
             'tollgate_charges_total',
+            'lubricants_cost',
             'other_expenses_total',
             'total_cost',
         ];
@@ -68,7 +70,7 @@ class ConsignmentsExport implements FromArray, WithHeadings, WithStyles, WithEve
     public function styles(Worksheet $sheet)
     {
         // Header styling
-        $sheet->getStyle('A1:R1')->applyFromArray([
+        $sheet->getStyle('A1:S1')->applyFromArray([
             'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFFFF']],
             'fill' => ['fillType' => 'solid', 'startColor' => ['argb' => 'FF1976D2']],
             'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
@@ -76,7 +78,7 @@ class ConsignmentsExport implements FromArray, WithHeadings, WithStyles, WithEve
 
         // Add borders to all cells
         $lastRow = count($this->consignments) + 2; // +1 header +1 totals
-        $sheet->getStyle("A1:R{$lastRow}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle("A1:S{$lastRow}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         return [];
     }
@@ -89,7 +91,7 @@ class ConsignmentsExport implements FromArray, WithHeadings, WithStyles, WithEve
                 $lastRow = count($this->consignments) + 2; // header + data + totals
 
                 // Bold totals row and highlight
-                $sheet->getStyle("A{$lastRow}:R{$lastRow}")->applyFromArray([
+                $sheet->getStyle("A{$lastRow}:S{$lastRow}")->applyFromArray([
                     'font' => ['bold' => true],
                     'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFE0E0E0']],
                 ]);

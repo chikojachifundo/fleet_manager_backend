@@ -17,6 +17,7 @@ class ConsignmentReportService
             'fuelTransactions',
             'vehicleServices',
             'expenses',
+            'lubricantsTransactions',
         ]);
 
         if (!empty($filters['from_date'])) {
@@ -30,14 +31,16 @@ class ConsignmentReportService
         $consignments = $query->get();
 
         $data = $consignments->map(function ($c) {
-            $fuelTotal = $c->fuelTransactions->sum('total_cost');
-            $servicingTotal = $c->vehicleServices->sum('cost');
-            $roadCharges = $c->expenses->where('category', 'road-charge')->sum('amount');
-            $tollgateCharges = $c->expenses->where('category', 'toll-gate')->sum('amount');
-            $otherExpenses = $c->expenses->where('category', 'others')->sum('amount');
+            $fuelTotal = $c->fuelTransactions?->sum('total_cost');
+            $servicingTotal = $c->vehicleServices?->sum('cost');
+            $roadCharges = $c->expenses?->where('category', 'road-charge')->sum('amount');
+            $tollgateCharges = $c->expenses?->where('category', 'toll-gate')->sum('amount');
+            $otherExpenses = $c->expenses?->where('category', 'others')->sum('amount');
             $driverAllowance = $c->drivers_allowance ?? 0;
+            $lubricantsCost = $c->lubricantsTransactions?->sum('cost');
 
-            $totalCost = $driverAllowance + $fuelTotal + $servicingTotal + $roadCharges + $tollgateCharges + $otherExpenses;
+
+            $totalCost = $driverAllowance + $fuelTotal + $servicingTotal + $roadCharges + $tollgateCharges + $otherExpenses + $lubricantsCost;
 
             return [
                 'code' => $c->id,
@@ -56,6 +59,7 @@ class ConsignmentReportService
                 'servicing_total' => $servicingTotal,
                 'road_charges_total' => $roadCharges,
                 'tollgate_charges_total' => $tollgateCharges,
+                'lubricants_total' => $lubricantsCost,
                 'other_expenses_total' => $otherExpenses,
                 'total_cost' => $totalCost,
             ];
@@ -66,6 +70,10 @@ class ConsignmentReportService
             'fuel' => $data->sum('fuel_total'),
             'servicing' => $data->sum('servicing_total'),
             'road' => $data->sum('road_charges_total'),
+            'lubricants' => $data->sum('lubricants_total'),
+            'tollgate' => $data->sum('tollgate_charges_total'),
+            'other_expenses' => $data->sum('other_expenses_total'),
+            'road_charges' => $data->sum('road_charges_total'),
             'grand_total' => $data->sum('total_cost'),
         ];
 
