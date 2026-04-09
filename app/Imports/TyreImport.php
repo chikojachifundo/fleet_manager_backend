@@ -27,6 +27,10 @@ class TyreImport implements ToCollection, WithHeadingRow, WithValidation
                     ? Date::excelToDateTimeObject($row['purchase_date'])->format('Y-m-d')
                     : $row['purchase_date'];
 
+                $yearOfManufacture = is_numeric($row['year_of_manufacture'])
+                    ? Date::excelToDateTimeObject($row['year_of_manufacture'])->format('Y-m-d')
+                    : $row['year_of_manufacture'];
+
                 /*
                  |------------------------------------------
                  | Create Tyre
@@ -37,9 +41,9 @@ class TyreImport implements ToCollection, WithHeadingRow, WithValidation
                     'brand' => $row['brand'],
                     'model' => $row['model'],
                     'size' => $row['size'],
-                    'type' => $row['type'],
+                    'type' => strtolower($row['type']),
                     'thread_pattern' => $row['thread_pattern'],
-                    'category' => $row['category'],
+                    'category' => strtolower($row['category']),
                     'purchase_date' => $purchaseDate,
                     'purchase_cost' => $row['purchase_cost'],
 
@@ -49,7 +53,7 @@ class TyreImport implements ToCollection, WithHeadingRow, WithValidation
                     'status' => $row['status'] ?? 'in_stock',
 
                     // Optional field (not in your original table but requested)
-                    'year_of_manufacture' => $row['year_of_manufacture'] ?? null,
+                    'year_of_manufacture' => $yearOfManufacture ?? null,
 
                     // Required FK (ensure it's in template)
                     'capturer' => auth()->id(),
@@ -64,13 +68,13 @@ class TyreImport implements ToCollection, WithHeadingRow, WithValidation
             '*.serial_number' => 'required|string|max:255|unique:tyres,serial_number',
             '*.brand' => 'required|string|max:255',
             '*.model' => 'required|string|max:255',
-            '*.size' => 'required|string|max:255',
+            '*.size' => 'required',
 
-            '*.type' => 'required|in:tube,tubeless',
+            '*.type' => 'required|in:tube,Tube,tubeless,Tubeless',
 
             '*.thread_pattern' => 'required|string|max:255',
 
-            '*.category' => 'required|in:steer,driver,trailer',
+            '*.category' => 'required|in:steer,Steer,driver,Driver,trailer,Trailer',
 
             '*.purchase_date' => 'required',
 

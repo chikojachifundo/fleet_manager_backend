@@ -18,7 +18,7 @@ class ConsignmentController extends Controller
     public function index()
     {
         return response()->json([
-            'consignments' => Consignment::with('driver','consignmentRoute')->get(),
+            'consignments' => Consignment::with('driver','consignmentRoute','horse')->get(),
         ]);
     }
 

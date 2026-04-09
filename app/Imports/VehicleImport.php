@@ -26,7 +26,7 @@ class VehicleImport implements ToModel, WithHeadingRow, WithValidation
             'category' => $row['category'],
 
             'model' => $row['model'],
-            'fuel_id' => $fuel->id,
+            'fuel_id' => $fuel?->id,
             'mileage' => $row['mileage'],
             'description' => $row['description'],
         ]);
@@ -39,7 +39,7 @@ class VehicleImport implements ToModel, WithHeadingRow, WithValidation
             '*.registration_number' => 'required',
             '*.engine_number' => 'required',
             '*.category' => 'required',
-            '*.fuel' => 'required',
+            '*.fuel' => 'nullable|in:petrol,diesel',
             '*.mileage' => 'required',
             '*.year_of_manufacture' => 'required',
             '*.model' => 'required',

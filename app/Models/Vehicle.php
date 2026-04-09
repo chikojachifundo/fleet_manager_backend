@@ -37,4 +37,9 @@ class Vehicle extends Model implements HasMedia
         return $this->hasMany(TyreMovement::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(VehicleCertificate::class);
+    }
+
 }

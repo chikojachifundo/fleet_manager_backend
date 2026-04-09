@@ -24,6 +24,16 @@ class StoreSeeder extends Seeder
         ]);
 
         DB::table('stores')->insert([
+            'name' => 'Blantyre MD`s stores office',
+            'code' => 'BT-MD-STORES',
+            'location' => 'Blantyre',
+            'stores_manager' => 'Mr Japhet',
+            'stores.stores_manager_phone_number' => '0888271862',
+            'status' => 'open',
+            'description' => 'Blantyre main stores office at the head office',
+        ]);
+
+        DB::table('stores')->insert([
             'name' => 'Mangochi main stores office',
             'code' => 'MHG-main',
             'location' => 'Mangochi',

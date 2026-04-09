@@ -13,7 +13,7 @@ class Driver extends Model implements HasMedia
     /** @use HasFactory<\Database\Factories\DriverFactory> */
     use HasFactory, InteractsWithMedia;
     protected  $guarded = [];
-    protected $appends = ['full_name','age'];
+    protected $appends = ['full_name','age','actual_birthdate'];
     protected $casts = [
         'birthdate' => 'date',
     ];
@@ -26,5 +26,10 @@ class Driver extends Model implements HasMedia
     public function getAgeAttribute()
     {
         return $this->birthdate?->age;
+    }
+
+    public function getActualBirthdateAttribute(): string
+    {
+        return Carbon::parse($this->birthdate)->format('Y-m-d');
     }
 }

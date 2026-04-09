@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consignment;
 use App\Models\SparePartTransaction;
 use App\Models\User;
 use App\Models\VehicleService;
 use App\Http\Requests\StoreVehicleServiceRequest;
 use App\Http\Requests\UpdateVehicleServiceRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class VehicleServiceController extends Controller
@@ -34,7 +36,46 @@ class VehicleServiceController extends Controller
      */
     public function store(StoreVehicleServiceRequest $request)
     {
+
+        //checking if a vehicle is on a consignment and servicing dates is in line and the consignment is active
         $data = $request->validated();
+
+        if (!empty($data['consignment_id'])) {
+
+            $consignment = Consignment::find($data['consignment_id']);
+
+            // 1. Check if consignment exists
+            if (!$consignment) {
+                return response()->json([
+                    'message' => 'Consignment not found.'
+                ], 404);
+            }
+
+            // 2. Check consignment status
+            if (!in_array($consignment->status, ['pending', 'approved'])) {
+                return response()->json([
+                    'message' => 'Fuel cannot be booked. Consignment is already delivered.'
+                ], 422);
+            }
+
+            // 3. Check if vehicle belongs to consignment
+            if (!in_array($data['vehicle_id'], [$consignment->vehicle_id, $consignment->horse_id])) {
+                return response()->json([
+                    'message' => 'Selected vehicle is not part of this consignment.'
+                ], 422);
+            }
+
+            // 4. Check date alignment
+            $serviceDate = Carbon::parse($data['date']);
+            $consignmentDate = Carbon::parse($consignment->date);
+
+            if ($serviceDate->lt($consignmentDate)) {
+                return response()->json([
+                    'message' => 'Service date cannot be earlier than consignment date.'
+                ], 422);
+            }
+        }
+
         DB::transaction(function () use ($data) {
             $vehicleService = VehicleService::create([
                 'description' => $data['description'],

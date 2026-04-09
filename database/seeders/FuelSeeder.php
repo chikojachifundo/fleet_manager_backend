@@ -16,14 +16,14 @@ class FuelSeeder extends Seeder
         DB::table('fuels')->insert([
             'code' => 'F1',
             'name' => 'Petrol',
-            'cost_per_litre' => 4965,
+            'cost_per_litre' => 6672,
             'description' => 'Gasoline',
         ]);
 
         DB::table('fuels')->insert([
             'code' => 'F2',
             'name' => 'Diesel',
-            'cost_per_litre' => 4945,
+            'cost_per_litre' => 6687,
             'description' => 'Diesel',
         ]);
     }

@@ -12,7 +12,15 @@ class ApproveConsignmentController extends Controller
      */
     public function __invoke(Request $request, Consignment $consignment)
     {
-        $consignment->update(['status' => 'approved']);
+        if ($consignment->capturer_id == auth()->id()) {
+            return response()->json([
+                'message' => 'Sorry, you initiated the transaction, you need another user to approve it.'
+            ], 422);
+        }
+        $consignment->update([
+            'status' => 'approved',
+            'approver_id' => auth()->id()
+        ]);
         return response()->json([
             'message' => 'Consignment approved successfully',
         ]);
