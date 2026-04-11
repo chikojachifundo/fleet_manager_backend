@@ -2,16 +2,31 @@
 
 namespace App\Exports;
 
+namespace App\Exports;
+
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SummarySheet implements FromArray, WithHeadings
+class SummarySheet implements FromArray, WithHeadings, WithStyles, WithEvents, ShouldAutoSize
 {
     protected $data;
 
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->data = collect($data);
+    }
+
+    public function headings(): array
+    {
+        return [
+            ['EXPENSE SUMMARY REPORT'],
+            ['Category', 'Total Amount'],
+        ];
     }
 
     public function array(): array
@@ -26,22 +41,71 @@ class SummarySheet implements FromArray, WithHeadings
             $grandTotal += $total;
 
             $rows[] = [
-                'category' => $category,
-                'total' => $total,
+                $category,
+                $total,
             ];
         }
 
-        // ✅ Add grand total row
+        // grand total row
         $rows[] = [
-            'category' => 'GRAND TOTAL',
-            'total' => $grandTotal,
+            'GRAND TOTAL',
+            $grandTotal,
         ];
 
         return $rows;
     }
 
-    public function headings(): array
+    public function styles(Worksheet $sheet)
     {
-        return ['Category', 'Total Amount'];
+        return [
+            1 => [
+                'font' => [
+                    'bold' => true,
+                    'size' => 16,
+                    'color' => ['rgb' => '1F4E79'],
+                ],
+            ],
+            2 => [
+                'font' => [
+                    'bold' => true,
+                    'color' => ['rgb' => 'FFFFFF'],
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '4F81BD'],
+                ],
+                'alignment' => [
+                    'horizontal' => 'center',
+                ],
+            ],
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+
+                $sheet = $event->sheet->getDelegate();
+
+                $lastRow = $sheet->getHighestRow();
+                $lastColumn = $sheet->getHighestColumn();
+
+                // Borders
+                $sheet->getStyle("A2:{$lastColumn}{$lastRow}")
+                    ->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            ],
+                        ],
+                    ]);
+
+                // Format currency column
+                $sheet->getStyle("B3:B{$lastRow}")
+                    ->getNumberFormat()
+                    ->setFormatCode('#,##0.00');
+            },
+        ];
     }
 }

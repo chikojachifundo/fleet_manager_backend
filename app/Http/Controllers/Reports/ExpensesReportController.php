@@ -66,7 +66,7 @@ class ExpensesReportController extends Controller
                 'vehicle_services.date as date',
                 DB::raw("'Service' as category"),
                 'vehicle_services.id as reference',
-                DB::raw("CONCAT('Vehicle service ID: ', vehicle_services.id) as description"),
+                DB::raw("CONCAT('Vehicle service ID: ', vehicle_services.description) as description"),
                 'vehicle_services.cost as amount'
             );
 
