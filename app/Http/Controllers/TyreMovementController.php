@@ -60,7 +60,7 @@ class TyreMovementController extends Controller
                     return response()->json([
                         'message' => 'Failed to process tyre movements',
                         'error' => "The position is already taken. Please remove the allocation first before new assignment",
-                    ], 500);
+                    ], 422);
                 }
 
                 // 🔴 CASE 1: REMOVE TYRE

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ApproveConsignmentController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
@@ -26,6 +27,7 @@ use App\Http\Controllers\LubricantTransactionController;
 use App\Http\Controllers\RejectConsignmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Reports\ConsignmentsReportController;
+use App\Http\Controllers\Reports\ExpensesReportController;
 use App\Http\Controllers\Reports\VehicleCertificateReportController;
 use App\Http\Controllers\SparePartCodeController;
 use App\Http\Controllers\SparePartController;
@@ -114,8 +116,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('vehicles-servicing', VehicleServiceController::class)->parameters([
         'vehicles-servicing' => 'vehicleService'
     ]);
-    Route::post('/vehicles/servicing/{vehicleService}/approve', [VehicleServiceActionController::class,'approve']);
-    Route::post('/vehicles/servicing/{vehicleService}/reject', [VehicleServiceActionController::class,'reject']);
+    Route::post('/vehicles/servicing/{vehicleService}/approve', [VehicleServiceActionController::class, 'approve']);
+    Route::post('/vehicles/servicing/{vehicleService}/reject', [VehicleServiceActionController::class, 'reject']);
 
 
     Route::delete('documents/{media}/delete', DeleteMediaController::class)->name('documents.delete');
@@ -128,6 +130,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('reports/vehicle/certificates', [VehicleCertificateReportController::class, 'vehicleCertificates'])->name('reports.vehicle.certificates');
     Route::get('reports/vehicle/certificates/export', [VehicleCertificateReportController::class, 'exportVehicleCertificates'])->name('reports.vehicle.certificates.export');
 
+    Route::get('reports/expenses', [ExpensesReportController::class, 'index'])->name('reports.expenses');
+    Route::get('reports/expenses/export', [ExpensesReportController::class, 'export'])->name('reports.expenses.export');
     Route::resource('users', UserController::class);
     Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
+
+    Route::post('/account/password/change', [AccountSettingsController::class, 'changePassword'])->name('account.password.change');
 });

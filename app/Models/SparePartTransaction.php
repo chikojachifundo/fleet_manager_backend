@@ -12,7 +12,7 @@ class SparePartTransaction extends Model
 
     protected $guarded = [];
 
-    public function sparePart()
+    public function sparePart(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SparePart::class);
     }
