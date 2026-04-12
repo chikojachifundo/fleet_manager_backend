@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\Api\AuditTrailController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ApproveConsignmentController;
 use App\Http\Controllers\ApproveIncomingSparePartRequisition;
@@ -42,10 +43,52 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehicleServiceActionController;
 use App\Http\Controllers\VehicleServiceController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+
+
+// Send reset link
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+        ? response()->json(['message' => 'Reset link sent'])
+        : response()->json(['message' => 'Unable to send link'], 400);
+});
+
+// Reset password
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:6|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->save();
+        }
+    );
+
+    return $status === Password::PASSWORD_RESET
+        ? response()->json(['message' => 'Password reset successful'])
+        : response()->json(['message' => 'Invalid token'], 400);
+});
+
+
+
+
 
 
 Route::get('/user', function (Request $request) {
@@ -132,8 +175,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('reports/expenses', [ExpensesReportController::class, 'index'])->name('reports.expenses');
     Route::get('reports/expenses/export', [ExpensesReportController::class, 'export'])->name('reports.expenses.export');
+
+
     Route::resource('users', UserController::class);
     Route::post('/users/{user}/change-password', ChangeUserPasswordController::class)->name('users.change-password');
+
+    Route::get('/audit-trails', [AuditTrailController::class, 'index']);
 
     Route::post('/account/password/change', [AccountSettingsController::class, 'changePassword'])->name('account.password.change');
 });

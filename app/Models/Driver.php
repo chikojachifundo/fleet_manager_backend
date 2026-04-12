@@ -5,13 +5,15 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Driver extends Model implements HasMedia
+class Driver extends Model implements HasMedia, Auditable
 {
     /** @use HasFactory<\Database\Factories\DriverFactory> */
     use HasFactory, InteractsWithMedia;
+    use \OwenIt\Auditing\Auditable;
     protected  $guarded = [];
     protected $appends = ['full_name','age','actual_birthdate'];
     protected $casts = [

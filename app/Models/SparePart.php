@@ -5,11 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class SparePart extends Model
+class SparePart extends Model implements Auditable
 {
     /** @use HasFactory<\Database\Factories\SparePartFactory> */
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
     protected $appends = ['formatted_value', 'formatted_purchase_date', 'formatted_expiry_date'];

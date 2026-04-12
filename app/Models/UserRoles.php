@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class UserRoles extends Model
+class UserRoles extends Model implements Auditable
 {
     /** @use HasFactory<\Database\Factories\UserRolesFactory> */
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
+
+
 }
