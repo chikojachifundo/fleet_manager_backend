@@ -48,6 +48,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
 
 
