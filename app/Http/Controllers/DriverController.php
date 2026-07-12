@@ -35,7 +35,7 @@ class DriverController extends Controller
     public function store(StoreDriverRequest $request)
     {
 
-        DB::transaction(function () use ($request) {
+        $driver = DB::transaction(function () use ($request) {
 
             $data = $request->validated();
             $driverUser = User::create([
@@ -46,11 +46,28 @@ class DriverController extends Controller
                 'status' => 'expired',
             ]);
 
-            Driver::create(array_merge($data, ['user_id' => $driverUser->id]));
+            return Driver::create(array_merge($data, ['user_id' => $driverUser->id]));
         });
 
+        // Attach license file
+        if ($request->hasFile('license_file')) {
+            $driver->addMediaFromRequest('license_file')
+                ->usingName($driver->licence_number . '_license')
+                ->withCustomProperties(['category' => 'license'])
+                ->toMediaCollection('license');
+        }
+
+        // Attach national ID file
+        if ($request->hasFile('national_id_file')) {
+            $driver->addMediaFromRequest('national_id_file')
+                ->usingName($driver->national_id_number . '_national_id')
+                ->withCustomProperties(['category' => 'national_id'])
+                ->toMediaCollection('national_id');
+        }
+
         return response()->json([
-            'data' => $request->validated()
+            'message' => 'Driver registered successfully',
+            'driver' => $driver->load('media'),
         ]);
     }
 
@@ -79,6 +96,23 @@ class DriverController extends Controller
     public function update(UpdateDriverRequest $request, Driver $driver)
     {
         $driver->update($request->validated());
+
+        // Attach license file if provided
+        if ($request->hasFile('license_file')) {
+            $driver->addMediaFromRequest('license_file')
+                ->usingName($driver->licence_number . '_license')
+                ->withCustomProperties(['category' => 'license'])
+                ->toMediaCollection('license');
+        }
+
+        // Attach national ID file if provided
+        if ($request->hasFile('national_id_file')) {
+            $driver->addMediaFromRequest('national_id_file')
+                ->usingName($driver->national_id_number . '_national_id')
+                ->withCustomProperties(['category' => 'national_id'])
+                ->toMediaCollection('national_id');
+        }
+
         return response()->json([
             'message'=>'Driver updated successfully',
         ]);

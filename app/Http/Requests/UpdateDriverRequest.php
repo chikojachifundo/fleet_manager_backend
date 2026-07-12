@@ -37,6 +37,8 @@ class UpdateDriverRequest extends FormRequest
             'physical_address' => 'nullable|string|min:3',
             'next_of_kin_name' => 'nullable|string|min:3',
             'next_of_kin_phone_number' => 'nullable|string|min:8',
+            'license_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'national_id_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ];
     }
 }
