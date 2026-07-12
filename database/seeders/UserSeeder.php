@@ -11,11 +11,20 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'Administrator',
-            'email' => 'administrator@cpl.com',
-            'password' => bcrypt('Fleet@2026        '),
-            'group' => 'admins',
-            'status' => 'active',
+            [
+                'name' => 'Cyrus',
+                'email' => 'thindwacyrus86@gmail.com',
+                'password' => bcrypt('password'),
+                'group' => 'admins',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Administrator',
+                'email' => 'administrator@cpl.com',
+                'password' => bcrypt('Fleet@2026        '),
+                'group' => 'admins',
+                'status' => 'active',
+            ],
         ]);
     }
 }
