@@ -38,13 +38,19 @@ class DriverController extends Controller
         $driver = DB::transaction(function () use ($request) {
 
             $data = $request->validated();
-            $driverUser = User::create([
-                'name' => $data['firstname'] . ' ' . $data['surname'],
-                'email' => $data['email'],
-                'password' => Hash::make(ucfirst($data['surname'] . "@2026")),
-                'group' => 'drivers',
-                'status' => 'expired',
-            ]);
+
+            // Remove file fields — they're not database columns
+            unset($data['license_file'], $data['national_id_file']);
+
+            $driverUser = User::firstOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['firstname'] . ' ' . $data['surname'],
+                    'password' => Hash::make(ucfirst($data['surname'] . "@2026")),
+                    'group' => 'drivers',
+                    'status' => 'expired',
+                ]
+            );
 
             return Driver::create(array_merge($data, ['user_id' => $driverUser->id]));
         });
