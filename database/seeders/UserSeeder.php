@@ -20,8 +20,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Administrator',
-                'email' => 'administrator@cpl.com',
-                'password' => bcrypt('Fleet@2026        '),
+                'email' => 'chifundochikoja@yahoo.com',
+                'password' => bcrypt('Fleet@2026'),
                 'group' => 'admins',
                 'status' => 'active',
             ],
