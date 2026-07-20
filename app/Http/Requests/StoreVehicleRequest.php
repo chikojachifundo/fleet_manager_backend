@@ -23,7 +23,7 @@ class StoreVehicleRequest extends FormRequest
     {
         return [
             'registration_number' => 'required|string|unique:vehicles,registration_number',
-            'engine_number' => 'required|string|unique:vehicles,engine_number',
+            'engine_number' => 'nullable|string|unique:vehicles,engine_number',
             'chassis_number' => 'required|string|unique:vehicles,chassis_number',
             'model' => 'required|string|min:3',
             'category' => 'required|string|min:3',

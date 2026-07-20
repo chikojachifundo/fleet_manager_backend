@@ -23,7 +23,7 @@ class UpdateVehicleRequest extends FormRequest
     {
         return [
             'registration_number' => 'required|string',
-            'engine_number' => 'required|string',
+            'engine_number' => 'nullable|string',
             'chassis_number' => 'required|string',
             'model' => 'required|string|min:3',
             'category' => 'required|string|min:3',
