@@ -4,9 +4,11 @@ namespace App\Imports;
 
 use App\Models\Driver;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -22,15 +24,31 @@ class DriverImport implements ToCollection, WithHeadingRow, WithValidation
         DB::transaction(function () use ($rows) {
 
             foreach ($rows as $row) {
-                $birthdate = is_numeric($row['birthdate'])
-                    ? Date::excelToDateTimeObject($row['birthdate'])->format('Y-m-d')
-                    : $row['birthdate'];
 
-                $engagementDate = is_numeric($row['engagement_date'])
-                    ? Date::excelToDateTimeObject($row['engagement_date'])->format('Y-m-d')
-                    : $row['engagement_date'];
+//                Log::info($row);
+
+                $birthdate = null;
+
+                if (is_numeric($row['birthdate'])) {
+                    $birthdate = Date::excelToDateTimeObject($row['birthdate'])
+                        ->format('Y-m-d');
+                } elseif (!empty($row['birthdate'])) {
+                    $birthdate = Carbon::createFromFormat('d/m/Y', trim($row['birthdate']))
+                        ->format('Y-m-d');
+                }
 
 
+                $engagementDate = null;
+                if (is_numeric($row['engagement_date'])) {
+                    $engagementDate = Date::excelToDateTimeObject($row['engagement_date'])
+                        ->format('Y-m-d');
+                } elseif (!empty($row['engagement_date'])) {
+                    $engagementDate = Carbon::createFromFormat('d/m/Y', trim($row['engagement_date']))
+                        ->format('Y-m-d');
+                }
+
+//                Log::info($birthdate);
+//                Log::info($engagementDate);
                 /*
                  |------------------------------------------
                  | 1. Create User
@@ -52,6 +70,13 @@ class DriverImport implements ToCollection, WithHeadingRow, WithValidation
                  |------------------------------------------
                  */
 
+                $gender = null;
+                if (strtolower($row['gender']) == 'male' ) {
+                    $gender = 'M';
+                }elseif (strtolower($row['gender']) == 'female') {
+                    $gender = 'F';
+                }
+
                 Driver::create([
                     'user_id' => $user->id,
                     'national_id_number' => $row['national_id_number'],
@@ -60,7 +85,7 @@ class DriverImport implements ToCollection, WithHeadingRow, WithValidation
                     'licence_type' => $row['licence_type'],
                     'firstname' => $row['firstname'],
                     'surname' => $row['surname'],
-                    'gender' => $row['gender'],
+                    'gender' => $gender,
                     'marital_status' => $row['marital_status'],
                     'birthdate' => $birthdate,
                     'engagement_date' => $engagementDate,
