@@ -31,7 +31,11 @@ class FuelController extends Controller
      */
     public function store(StoreFuelRequest $request)
     {
-        //
+        $fuel = Fuel::create($request->validated());
+        return response()->json([
+            'fuel' => $fuel,
+            'message' => 'Fuel type created successfully.',
+        ], 201);
     }
 
     /**
@@ -55,7 +59,11 @@ class FuelController extends Controller
      */
     public function update(UpdateFuelRequest $request, Fuel $fuel)
     {
-        //
+        $fuel->update($request->validated());
+        return response()->json([
+            'fuel' => $fuel,
+            'message' => 'Fuel type updated successfully.',
+        ]);
     }
 
     /**
@@ -63,6 +71,9 @@ class FuelController extends Controller
      */
     public function destroy(Fuel $fuel)
     {
-        //
+        $fuel->delete();
+        return response()->json([
+            'message' => 'Fuel type deleted successfully.',
+        ]);
     }
 }

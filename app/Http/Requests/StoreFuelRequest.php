@@ -11,7 +11,7 @@ class StoreFuelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreFuelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'code' => ['required', 'string', 'max:255', 'unique:fuels,code'],
+            'name' => ['required', 'string', 'max:255', 'unique:fuels,name'],
+            'cost_per_litre' => ['required', 'numeric', 'min:0'],
+            'description' => ['nullable', 'string'],
         ];
     }
 }

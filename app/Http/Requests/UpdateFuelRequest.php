@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateFuelRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateFuelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +22,13 @@ class UpdateFuelRequest extends FormRequest
      */
     public function rules(): array
     {
+        $fuelId = $this->route('fuel');
+
         return [
-            //
+            'code' => ['required', 'string', 'max:255', Rule::unique('fuels', 'code')->ignore($fuelId)],
+            'name' => ['required', 'string', 'max:255', Rule::unique('fuels', 'name')->ignore($fuelId)],
+            'cost_per_litre' => ['required', 'numeric', 'min:0'],
+            'description' => ['nullable', 'string'],
         ];
     }
 }

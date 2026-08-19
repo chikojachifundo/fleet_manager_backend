@@ -11,4 +11,6 @@ class Fuel extends Model implements Auditable
     /** @use HasFactory<\Database\Factories\FuelFactory> */
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
+
+    protected $guarded = [];
 }
